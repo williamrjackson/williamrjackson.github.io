@@ -1,6 +1,6 @@
 {
-"companyName": "Bill Jackson",
-"productName": "Contagion Prototype",
+"companyName": "DefaultCompany",
+"productName": "HerdImmunity",
 "productVersion": "0.1",
 "dataUrl": "Contagion.data.unityweb",
 "wasmCodeUrl": "Contagion.wasm.code.unityweb",
