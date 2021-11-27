@@ -57,13 +57,13 @@
         // Avoid draining fillrate performance on mobile devices,
         // and default/override low DPI mode on mobile browsers.
         config.devicePixelRatio = 1;
-        mobileWarning.style.display = "block";
-        setTimeout(() => {
-          mobileWarning.style.display = "none";
-        }, 5000);
+        // mobileWarning.style.display = "block";
+        // setTimeout(() => {
+        //   mobileWarning.style.display = "none";
+        // }, 5000);
       } else {
-        canvas.style.width = "800px";
-        canvas.style.height = "450px";
+        canvas.style.width = "375px";
+        canvas.style.height = "667px";
       }
       loadingBar.style.display = "block";
 
