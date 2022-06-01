@@ -4,10 +4,11 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
         
+        //Bucket Configurations
         
 var bucketName = "gpx-tracks";
 var bucketRegion = "us-east-1";
-var IdentityPoolId = "c6f19223-fdfa-4798-b3ca-79524a9f05a6";
+var IdentityPoolId = "us-east-1:c6f19223-fdfa-4798-b3ca-79524a9f05a6";
 
  AWS.config.update({
                 region: bucketRegion,
@@ -42,8 +43,8 @@ var IdentityPoolId = "c6f19223-fdfa-4798-b3ca-79524a9f05a6";
                 {
                     var file = files[0];
                     var fileName = file.name;
-                    var filePath = 'my-first-bucket-path/' + fileName;
-                    var fileUrl = 'https://' + BUCKET_REGION + '.amazonaws.com/my-first-bucket/' +  filePath;
+                    var filePath = 'gpxFiles/' + fileName;
+                    var fileUrl = 'https://' + BUCKET_REGION + '.amazonaws.com/' +  filePath;
             
                     s3.upload({
                                     Key: filePath,
