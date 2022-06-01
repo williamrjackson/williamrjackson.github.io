@@ -44,7 +44,7 @@ var IdentityPoolId = "us-east-1:c6f19223-fdfa-4798-b3ca-79524a9f05a6";
                     var file = files[0];
                     var fileName = file.name;
                     var filePath = 'gpxFiles/' + fileName;
-                    var fileUrl = 'https://' + BUCKET_REGION + '.amazonaws.com/' +  filePath;
+                    var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/' +  filePath;
             
                     s3.upload({
                                     Key: filePath,
