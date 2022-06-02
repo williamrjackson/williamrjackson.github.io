@@ -1,28 +1,30 @@
 <!doctype html>
+
 <head>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.357.0.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
-        
+
         //Bucket Configurations
-        
-var bucketName = "gpx-tracks";
-var bucketRegion = "us-east-1";
-var IdentityPoolId = "us-east-1:c6f19223-fdfa-4798-b3ca-79524a9f05a6";
 
- AWS.config.update({
-                region: bucketRegion,
-                credentials: new AWS.CognitoIdentityCredentials({
+        var bucketName = "gpx-tracks";
+        var bucketRegion = "us-east-1";
+        var IdentityPoolId = "us-east-1:c6f19223-fdfa-4798-b3ca-79524a9f05a6";
+
+        AWS.config.update({
+            region: bucketRegion,
+            credentials: new AWS.CognitoIdentityCredentials({
                 IdentityPoolId: IdentityPoolId
-                })
-            });
-
-            var s3 = new AWS.S3({
-                apiVersion: '2006-03-01',
-                params: {Bucket: bucketName}
+            })
         });
-</script>
+
+        var s3 = new AWS.S3({
+            apiVersion: '2006-03-01',
+            params: { Bucket: bucketName }
+        });
+    </script>
 </head>
+
 <body>
     <!-- A functional html code-->
     <div>
@@ -31,58 +33,61 @@ var IdentityPoolId = "us-east-1:c6f19223-fdfa-4798-b3ca-79524a9f05a6";
         <br>Or:<br>
         <input type="file" id="fileUpload">
     </div>
-<br><br>
+    <br><br>
     <div>
-    <button onclick="s3upload()">Submit</button>
+        <button onclick="s3upload()">Submit</button>
     </div>
 
     <progress max=”100” value=”0”></progress>
 
     <script type="text/javascript">
-    async function url2blob(url) {
-    try {
-        const data = await fetch(url);
-        const blob = await data.blob();
-        await navigator.clipboard.write([
-        new ClipboardItem({
-            [blob.type]: blob
-        })
-        ]);
-        console.log("Success.");
-    } catch (err) {
-        console.error(err.name, err.message);
-    }
-    }
-      function s3upload() {  
-                var url = document.getElementById('fileReference').value;
-                var files = document.getElementById('fileUpload').files;
-                if (files)
-                {
-                    var file = files[0];
+        async function getFileFromUrl(url, defaultType = 'text/xml') {
+            var name = "newtrack.gpx" 
+            const response = await fetch(url);
+            const data = await response.blob();
+            var result = new File([data], name, {
+                type: data.type || defaultType,
+            });
+            return result;
+        }
+
+        async function s3upload() {
+            var url = document.getElementById('fileReference').value;
+            var files = document.getElementById('fileUpload').files;
+            var fileName = "filename.gpx";
+            if (files.length > 0) {
+                var file = files[0];
+                fileName = file.name;
+            }
+            else {
+                return;
+                try {
+                    var file = await getFileFromUrl(url, 'text/xml');
+                    fileName = file.name;
+                } catch (error) {
+                    console.log(error);
+                    return;
                 }
-                else
-                {
-                    var file = url2blob(url);
+            }
+            var filePath = 'gpxFiles/' + fileName;
+            var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/' + filePath;
+
+            s3.upload({
+                Key: filePath,
+                Body: file,
+                ACL: 'public-read'
+            }, function (err, data) {
+                if (err) {
+                    reject('error');
                 }
-                    var fileName = file.name;
-                    var filePath = 'gpxFiles/' + fileName;
-                    var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/' +  filePath;
-            
-                    s3.upload({
-                                    Key: filePath,
-                                    Body: file,
-                                    ACL: 'public-read'
-                                }, function(err, data) {
-                                    if(err) {
-                                        reject('error');
-                                    }
-                                    
-                                    alert('Successfully Uploaded!');
-                                }).on('httpUploadProgress', function (progress) {
-                                    var uploaded = parseInt((progress.loaded * 100) / progress.total);
-                                    $("progress").attr('value', uploaded);
-                                });
-      };
+
+                alert('Successfully Uploaded!');
+            }).on('httpUploadProgress', function (progress) {
+                var uploaded = parseInt((progress.loaded * 100) / progress.total);
+                $("progress").attr('value', uploaded);
+            });
+        };
     </script>
 </body>
+
 </html>
