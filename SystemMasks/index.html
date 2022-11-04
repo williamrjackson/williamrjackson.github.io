@@ -54,7 +54,7 @@
         }
         updateBannerVisibility();
       }
-
+      
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/SystemMasks.loader.js";
       var config = {
@@ -65,6 +65,7 @@
         companyName: "William R Jackson",
         productName: "Anatomy System Masks",
         productVersion: "1.0",
+        devicePixelRatio: "1",
         showBanner: unityShowBanner,
       };
 
@@ -86,7 +87,7 @@
 
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
-        config.devicePixelRatio = 1;
+        // config.devicePixelRatio = 1;
 
         canvas.style.width = window.innerWidth + 'px';
         canvas.style.height = window.innerHeight + 'px';
