@@ -1,9 +1,9 @@
 const cacheName = "WRJ-GreenBuilding-1.0";
 const contentToCache = [
-    "Build/WebGL.loader.js",
-    "Build/WebGL.framework.js",
-    "Build/WebGL.data",
-    "Build/WebGL.wasm",
+    "Build/GreenBuildingDemo.loader.js",
+    "Build/GreenBuildingDemo.framework.js",
+    "Build/GreenBuildingDemo.data",
+    "Build/GreenBuildingDemo.wasm",
     "TemplateData/style.css"
 
 ];
