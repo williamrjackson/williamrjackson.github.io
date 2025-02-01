@@ -3,9 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | ConnectFour</title>
+    <meta name="theme-color" content="#371A43">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Farkle Score">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="connectfour.png">
+    <link rel="icon" type="image/png" href="connectfour.png">
+    <title>Connect Four</title>
   </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <body style="background-color:#371A43; text-align: center; padding: 0; border: 0; margin: 0;">
     <canvas id="unity-canvas" width=480 height=850 tabindex="-1" style="width: 480px; height: 850px; background: #231F20"></canvas>
     <script src="Build/ConnectFour.loader.js"></script>
     <script>
@@ -30,8 +37,8 @@
         codeUrl: "Build/ConnectFour.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Wrj",
-        productName: "ConnectFour",
-        productVersion: "1.0",
+        productName: "Connec tFour",
+        productVersion: "1.1",
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
