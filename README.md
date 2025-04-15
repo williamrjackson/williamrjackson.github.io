@@ -20,6 +20,7 @@ Links:
 - [Orthographic Split](https://williamrjackson.github.io/OrthographicSplit/index.html)
 - [Pick Landmarks](https://williamrjackson.github.io/PickLandmarksTest/index.html)
 - [Proximity](https://williamrjackson.github.io/Proximity/index.html)
+- [Rive Audio Widget](https://williamrjackson.github.io/RiveAudioWidget/index.html)
 - [Rock Art](https://williamrjackson.github.io/RockArtTest/index.html)
 - [Rubiks Cube](https://williamrjackson.github.io/RubiksCube/index.html)
 - [Solitaire](https://williamrjackson.github.io/Solitaire/index.html)
