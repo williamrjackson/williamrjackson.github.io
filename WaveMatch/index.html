@@ -12,6 +12,25 @@
       </button>
     </div>
     <canvas id="unity-canvas" width=960 height=540 tabindex="-1" style="width: 960px; height: 540px; background: #231F20"></canvas>
+    <script>
+      // Intercept AudioContext creation to capture Unity's audio context
+      window.unityAudioContexts = [];
+      const OriginalAudioContext = window.AudioContext || window.webkitAudioContext;
+      
+      if (OriginalAudioContext) {
+        const AudioContextProxy = function() {
+          const ctx = new OriginalAudioContext(...arguments);
+          window.unityAudioContexts.push(ctx);
+          console.log('AudioContext created, state:', ctx.state);
+          return ctx;
+        };
+        AudioContextProxy.prototype = OriginalAudioContext.prototype;
+        window.AudioContext = AudioContextProxy;
+        if (window.webkitAudioContext) {
+          window.webkitAudioContext = AudioContextProxy;
+        }
+      }
+    </script>
     <script src="Build/WaveMatch.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -60,26 +79,34 @@
           canvas.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, cancelable: true, view: window }));
           canvas.dispatchEvent(new TouchEvent('touchend', { bubbles: true, cancelable: true, view: window }));
           
-          // Aggressively try to resume Unity's Web Audio context
-          let attempts = 0;
-          const maxAttempts = 20;
-          const checkInterval = setInterval(() => {
-            attempts++;
-            
-            // Unity stores its audio context in WEBAudio object
+          // Resume all captured AudioContext instances
+          console.log('Found', window.unityAudioContexts.length, 'AudioContext(s)');
+          window.unityAudioContexts.forEach((ctx, index) => {
+            console.log('AudioContext', index, 'state:', ctx.state);
+            if (ctx.state === 'suspended') {
+              ctx.resume().then(() => {
+                console.log('AudioContext', index, 'resumed successfully');
+              }).catch(err => {
+                console.error('Failed to resume AudioContext', index, err);
+              });
+            }
+          });
+          
+          // Also check for WEBAudio and other common Unity audio objects
+          setTimeout(() => {
             if (typeof WEBAudio !== 'undefined' && WEBAudio.audioContext) {
               console.log('Found WEBAudio.audioContext, state:', WEBAudio.audioContext.state);
               if (WEBAudio.audioContext.state === 'suspended') {
-                WEBAudio.audioContext.resume().then(() => {
-                  console.log('Unity AudioContext resumed successfully');
-                });
+                WEBAudio.audioContext.resume();
               }
-              clearInterval(checkInterval);
-            } else if (attempts >= maxAttempts) {
-              console.log('WEBAudio object not found after', attempts, 'attempts');
-              clearInterval(checkInterval);
             }
-          }, 100);
+            if (typeof Module !== 'undefined' && Module.SDL2 && Module.SDL2.audioContext) {
+              console.log('Found Module.SDL2.audioContext, state:', Module.SDL2.audioContext.state);
+              if (Module.SDL2.audioContext.state === 'suspended') {
+                Module.SDL2.audioContext.resume();
+              }
+            }
+          }, 500);
           
           console.log('Audio initialization triggered');
           
