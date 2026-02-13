@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | WavesWall</title>
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0; position: relative;">
+    <div id="audio-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+      <button id="start-button" style="padding: 20px 40px; font-size: 24px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+        🔊 Start Activity (Audio Enabled)
+      </button>
+    </div>
+    <canvas id="unity-canvas" width=960 height=540 tabindex="-1" style="width: 960px; height: 540px; background: #231F20"></canvas>
+    <script src="Build/WaveMatch.loader.js"></script>
+    <script>
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+
+        document.body.style.textAlign = "left";
+
+      }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        arguments: [],
+        dataUrl: "Build/WaveMatch.data",
+        frameworkUrl: "Build/WaveMatch.framework.js",
+        codeUrl: "Build/WaveMatch.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Museum of Science",
+        productName: "WavesWall",
+        productVersion: "1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      }).then((unityInstance) => {
+        // Handle audio context resumption on Start button
+        const startButton = document.getElementById('start-button');
+        const audioOverlay = document.getElementById('audio-overlay');
+        
+        startButton.addEventListener('click', () => {
+          // Resume Web Audio API context if it exists
+          if (window.AudioContext || window.webkitAudioContext) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioContext = new AudioContext();
+            if (audioContext.state === 'suspended') {
+              audioContext.resume().then(() => {
+                console.log('AudioContext resumed successfully');
+              });
+            }
+          }
+          
+          // Hide the overlay and button
+          audioOverlay.style.display = 'none';
+        });
+      }).catch((message) => {
+        alert(message);
+      });
+    </script>
+  </body>
+</html>

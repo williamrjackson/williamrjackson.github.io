@@ -28,5 +28,6 @@ Links:
 - [Step Sequencer](https://williamrjackson.github.io/StepSequencer/index.html)
 - [System Masks](https://williamrjackson.github.io/SystemMasks/index.html)
 - [Train Audio](https://williamrjackson.github.io/TrainAudio/index.html)
+- [Wave Match](https://williamrjackson.github.io/WaveMatch/index.html)
 - [Word Guess](https://williamrjackson.github.io/WordGuess/index.html)
 - [Word Search](https://williamrjackson.github.io/WordSearch/index.html)
