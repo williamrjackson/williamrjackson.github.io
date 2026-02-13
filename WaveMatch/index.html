@@ -61,16 +61,23 @@
           canvas.dispatchEvent(new TouchEvent('touchend', { bubbles: true, cancelable: true, view: window }));
           
           // Aggressively try to resume Unity's Web Audio context
-          setTimeout(() => {
+          let attempts = 0;
+          const maxAttempts = 20;
+          const checkInterval = setInterval(() => {
+            attempts++;
+            
             // Unity stores its audio context in WEBAudio object
             if (typeof WEBAudio !== 'undefined' && WEBAudio.audioContext) {
+              console.log('Found WEBAudio.audioContext, state:', WEBAudio.audioContext.state);
               if (WEBAudio.audioContext.state === 'suspended') {
                 WEBAudio.audioContext.resume().then(() => {
                   console.log('Unity AudioContext resumed successfully');
                 });
-              } else {
-                console.log('Unity AudioContext state:', WEBAudio.audioContext.state);
               }
+              clearInterval(checkInterval);
+            } else if (attempts >= maxAttempts) {
+              console.log('WEBAudio object not found after', attempts, 'attempts');
+              clearInterval(checkInterval);
             }
           }, 100);
           
