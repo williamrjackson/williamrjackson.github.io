@@ -45,18 +45,29 @@
         // Handle audio context resumption on Start button
         const startButton = document.getElementById('start-button');
         const audioOverlay = document.getElementById('audio-overlay');
+        const canvas = document.querySelector("#unity-canvas");
         
         startButton.addEventListener('click', () => {
-          // Resume Web Audio API context if it exists
-          if (window.AudioContext || window.webkitAudioContext) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            const audioContext = new AudioContext();
-            if (audioContext.state === 'suspended') {
-              audioContext.resume().then(() => {
-                console.log('AudioContext resumed successfully');
-              });
-            }
+          // Trigger user gesture on canvas - this wakes up Unity's Web Audio context
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          canvas.dispatchEvent(clickEvent);
+          
+          // Also try to resume any global audio context
+          if (window.AudioContext) {
+            const audioContexts = document.querySelectorAll('[data-audio-context]');
+            audioContexts.forEach(el => {
+              const ctx = el.__audioContext;
+              if (ctx && ctx.state === 'suspended') {
+                ctx.resume();
+              }
+            });
           }
+          
+          console.log('Audio initialization triggered');
           
           // Hide the overlay and button
           audioOverlay.style.display = 'none';
