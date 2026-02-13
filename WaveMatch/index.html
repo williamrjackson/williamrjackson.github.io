@@ -48,24 +48,31 @@
         const canvas = document.querySelector("#unity-canvas");
         
         startButton.addEventListener('click', () => {
-          // Trigger user gesture on canvas - this wakes up Unity's Web Audio context
-          const clickEvent = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true
-          });
-          canvas.dispatchEvent(clickEvent);
+          // Focus and simulate multiple interaction types on the canvas
+          canvas.focus();
           
-          // Also try to resume any global audio context
-          if (window.AudioContext) {
-            const audioContexts = document.querySelectorAll('[data-audio-context]');
-            audioContexts.forEach(el => {
-              const ctx = el.__audioContext;
-              if (ctx && ctx.state === 'suspended') {
-                ctx.resume();
+          // Dispatch click event
+          canvas.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window }));
+          canvas.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window }));
+          canvas.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+          
+          // Dispatch touch events for mobile compatibility
+          canvas.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, cancelable: true, view: window }));
+          canvas.dispatchEvent(new TouchEvent('touchend', { bubbles: true, cancelable: true, view: window }));
+          
+          // Aggressively try to resume Unity's Web Audio context
+          setTimeout(() => {
+            // Unity stores its audio context in WEBAudio object
+            if (typeof WEBAudio !== 'undefined' && WEBAudio.audioContext) {
+              if (WEBAudio.audioContext.state === 'suspended') {
+                WEBAudio.audioContext.resume().then(() => {
+                  console.log('Unity AudioContext resumed successfully');
+                });
+              } else {
+                console.log('Unity AudioContext state:', WEBAudio.audioContext.state);
               }
-            });
-          }
+            }
+          }, 100);
           
           console.log('Audio initialization triggered');
           
