@@ -12,6 +12,7 @@ Links:
 - [Frizbee](https://williamrjackson.github.io/Frizbee/index.html)
 - [Get Em](https://williamrjackson.github.io/GetEm/index.html)
 - [Green Building Demo](https://williamrjackson.github.io/GreenBuildingDemo/index.html)
+- [Harmonic Series](https://williamrjackson.github.io/HarmonicSeries/index.html)
 - [Harmony Distress Meter](https://williamrjackson.github.io/HarmonyDistressMeterTest/index.html)
 - [Hearing Puzzle Audio](https://williamrjackson.github.io/HearingPuzzleAudio/index.html)
 - [Hover Sync](https://williamrjackson.github.io/HoverSync/index.html)
