@@ -27,6 +27,7 @@ Links:
 - [Solitaire](https://williamrjackson.github.io/Solitaire/index.html)
 - [Spinner](https://williamrjackson.github.io/Spinner/index.html)
 - [Step Sequencer](https://williamrjackson.github.io/StepSequencer/index.html)
+- [String Harmonics](https://williamrjackson.github.io/StringHarmonics/index.html)
 - [System Masks](https://williamrjackson.github.io/SystemMasks/index.html)
 - [Train Audio](https://williamrjackson.github.io/TrainAudio/index.html)
 - [Wave Match](https://williamrjackson.github.io/WaveMatch/index.html)
