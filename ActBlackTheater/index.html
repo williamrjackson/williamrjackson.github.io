@@ -1,8 +1,30 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Act Black Theater</title>
+<meta charset="utf-8">
+<title>Gallery Theater Mode Docs</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+body{
+    max-width:900px;
+    margin:auto;
+    font-family:system-ui;
+    line-height:1.6;
+}
+</style>
 </head>
+
 <body>
-<h1>Welcome to Act Black Theater</h1>
+
+<div id="content">Loading...</div>
+
+<script>
+fetch("https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/README.md")
+  .then(r => r.text())
+  .then(md => {
+      document.getElementById("content").innerHTML = marked.parse(md);
+  });
+</script>
+
 </body>
 </html>
