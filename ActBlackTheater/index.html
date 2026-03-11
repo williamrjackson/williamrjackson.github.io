@@ -35,7 +35,12 @@
 </head>
 <body>
   <article id="content" class="markdown-body">Loading…</article>
-
+  <script>
+    marked.setOptions({
+      gfm: true,
+      breaks: false
+    });
+  </script>
   <script>
     const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
     const repoBlobBase = "https://github.com/williamrjackson/GalleryTheaterMode/blob/master/";
