@@ -1,66 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Gallery Theater Mode Documentation</title>
+<meta charset="utf-8">
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown-light.min.css">
+<title>Gallery Theater Mode Documentation</title>
 
-  <style>
-    body {
-      box-sizing: border-box;
-      min-width: 200px;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 45px;
-      background: #ffffff;
-    }
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked-gfm-heading-id/lib/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
 
-    @media (max-width: 767px) {
-      body {
-        padding: 15px;
-      }
-    }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown-light.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
 
-    .markdown-body {
-      background: #ffffff;
-    }
+<style>
 
-    .markdown-body img {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
+:root {
+  --color-border-default: #d0d7de;
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
+  --color-fg-default: #24292f;
+}
+
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  background: white;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 15px;
+  }
+}
+
+.markdown-body table {
+  display: block;
+  overflow-x: auto;
+}
+
+.markdown-body img {
+  max-width: 100%;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 32px;
+}
+
+.header a {
+  color: #0969da;
+  text-decoration: none;
+}
+
+.header a:hover {
+  text-decoration: underline;
+}
+
+</style>
 </head>
+
 <body>
-  <article id="content" class="markdown-body">Loading…</article>
-  <script>
-    marked.setOptions({
-      gfm: true,
-      breaks: false
-    });
-  </script>
-  <script>
-    const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
-    const repoBlobBase = "https://github.com/williamrjackson/GalleryTheaterMode/blob/master/";
 
-    fetch(repoBase + "README.md")
-      .then(r => r.text())
-      .then(md => {
-        md = md.replace(/!\[(.*?)\]\((?!https?:\/\/|\/)(.*?)\)/g, (match, alt, path) => {
-          return `![${alt}](${repoBase}${path})`;
-        });
+<div class="header">
+<h1>Gallery Theater Mode Documentation</h1>
+<p>
+Source:
+<a href="https://github.com/williamrjackson/GalleryTheaterMode">
+github.com/williamrjackson/GalleryTheaterMode
+</a>
+</p>
+</div>
 
-        md = md.replace(/(?<!!)\[(.*?)\]\((?!https?:\/\/|#|\/)(.*?)\)/g, (match, text, path) => {
-          return `[${text}](${repoBlobBase}${path})`;
-        });
+<article id="content" class="markdown-body">
+Loading documentation…
+</article>
 
-        document.getElementById("content").innerHTML = marked.parse(md);
-      })
-      .catch(err => {
-        document.getElementById("content").innerHTML = `<p>Failed to load README.</p><pre>${err}</pre>`;
-      });
-  </script>
+<script>
+
+marked.use(markedGfmHeadingId.gfmHeadingId());
+
+marked.setOptions({
+  gfm: true,
+  breaks: false,
+  highlight(code, lang) {
+    if (hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value;
+    }
+    return hljs.highlightAuto(code).value;
+  }
+});
+
+const repo = "williamrjackson/GalleryTheaterMode";
+const branch = "master";
+
+const rawBase =
+  `https://raw.githubusercontent.com/${repo}/${branch}/`;
+
+const blobBase =
+  `https://github.com/${repo}/blob/${branch}/`;
+
+fetch(rawBase + "README.md")
+.then(r => r.text())
+.then(md => {
+
+  md = md.replace(/!\[(.*?)\]\((?!https?:\/\/|\/)(.*?)\)/g,
+    (m, alt, path) => `![${alt}](${rawBase}${path})`);
+
+  md = md.replace(/(?<!!)\[(.*?)\]\((?!https?:\/\/|#|\/)(.*?)\)/g,
+    (m, text, path) => `[${text}](${blobBase}${path})`);
+
+  document.getElementById("content").innerHTML = marked.parse(md);
+
+  document.querySelectorAll("pre code").forEach(block => {
+    hljs.highlightElement(block);
+  });
+
+})
+.catch(err => {
+
+  document.getElementById("content").innerHTML =
+  `<p>Failed to load documentation.</p><pre>${err}</pre>`;
+
+});
+
+</script>
+
 </body>
 </html>
