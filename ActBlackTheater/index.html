@@ -8,15 +8,23 @@
 
 </head>
 
-<body class="markdown-body">
+<body>
 
-<div id="content">Loading...</div>
+<div id="content" class="markdown-body"></div>
 
 <script>
-fetch("https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/README.md")
+const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
+
+fetch(repoBase + "README.md")
   .then(r => r.text())
   .then(md => {
-      document.getElementById("content").innerHTML = marked.parse(md);
+
+    // Rewrite relative image paths
+    md = md.replace(/!\[(.*?)\]\((?!http)(.*?)\)/g, (match, alt, path) => {
+        return `![${alt}](${repoBase}${path})`;
+    });
+
+    document.getElementById("content").innerHTML = marked.parse(md);
   });
 </script>
 
