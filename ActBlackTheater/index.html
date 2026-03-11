@@ -29,10 +29,14 @@
 
 <body>
   <div id="content" class="markdown-body">Loading…</div>
-
   <script>
     const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
     const repoBlobBase = "https://github.com/williamrjackson/GalleryTheaterMode/blob/master/";
+  
+    marked.setOptions({
+      gfm: true,
+      breaks: false
+    });
   
     fetch(repoBase + "README.md")
       .then(r => r.text())
