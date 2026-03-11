@@ -1,18 +1,52 @@
-<script>
-  const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
-  const repoBlobBase = "https://github.com/williamrjackson/GalleryTheaterMode/blob/master/";
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Gallery Theater Mode Docs</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
 
-  fetch(repoBase + "README.md")
-    .then(r => r.text())
-    .then(md => {
-      md = md.replace(/!$begin:math:display$\(\.\*\?\)$end:math:display$$begin:math:text$\(\?\!https\?\:\\\/\\\/\|\\\/\)\(\.\*\?\)$end:math:text$/g, (match, alt, path) => {
-        return `![${alt}](${repoBase}${path})`;
+    @media (max-width: 767px) {
+      body {
+        padding: 15px;
+      }
+    }
+
+    .markdown-body img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="content" class="markdown-body">Loading…</div>
+
+  <script>
+    const repoBase = "https://raw.githubusercontent.com/williamrjackson/GalleryTheaterMode/master/";
+    const repoBlobBase = "https://github.com/williamrjackson/GalleryTheaterMode/blob/master/";
+  
+    fetch(repoBase + "README.md")
+      .then(r => r.text())
+      .then(md => {
+        md = md.replace(/!$begin:math:display$\(\.\*\?\)$end:math:display$$begin:math:text$\(\?\!https\?\:\\\/\\\/\|\\\/\)\(\.\*\?\)$end:math:text$/g, (match, alt, path) => {
+          return `![${alt}](${repoBase}${path})`;
+        });
+  
+        md = md.replace(/(?<!!)$begin:math:display$\(\.\*\?\)$end:math:display$$begin:math:text$\(\?\!https\?\:\\\/\\\/\|\#\|\\\/\)\(\.\*\?\)$end:math:text$/g, (match, text, path) => {
+          return `[${text}](${repoBlobBase}${path})`;
+        });
+  
+        document.getElementById("content").innerHTML = marked.parse(md);
       });
-
-      md = md.replace(/(?<!!)$begin:math:display$\(\.\*\?\)$end:math:display$$begin:math:text$\(\?\!https\?\:\\\/\\\/\|\#\|\\\/\)\(\.\*\?\)$end:math:text$/g, (match, text, path) => {
-        return `[${text}](${repoBlobBase}${path})`;
-      });
-
-      document.getElementById("content").innerHTML = marked.parse(md);
-    });
-</script>
+  </script>
+</body>
+</html>
